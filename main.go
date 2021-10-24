@@ -45,7 +45,7 @@ type Result struct {
 
 func singleEmailVerify(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-	email := ps.ByName("email")
+	email := r.URL.Query().Get("email")
 	ret, err := verifier.Verify(email)
 	index := strings.LastIndex(email, "@")
 	username := email[:index]
@@ -91,7 +91,7 @@ func main() {
 	//create router
 	router := httprouter.New()
 	//api route for verification
-	router.GET("/singleverify/:email", singleEmailVerify)
+	router.GET("/singleverify/", singleEmailVerify)
 
 	//start server
 	log.Fatal(http.ListenAndServe(":8081", router))
